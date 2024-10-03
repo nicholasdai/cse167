@@ -16,7 +16,10 @@ def compute_slope_estimator(x_vals,y_vals):
 
 #Problem 2
 def compute_intercept_estimator(x_vals,y_vals):
-    pass
+    n = len(x_vals)
+    mean_x = sum(x_vals)/n
+    mean_y = sum(y_vals)/n
+    return mean_y - compute_slope_estimator(x_vals,y_vals)*mean_x
 
 #Problem 3
 def train_model(x_vals,y_vals):
