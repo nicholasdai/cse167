@@ -4,22 +4,11 @@ import matplotlib.pyplot as plt
 
 #Problem 1
 def compute_slope_estimator(x_vals,y_vals):
-    tot = 0
-    div = 0
-    n = len(x_vals)
-    mean_x = sum(x_vals)/n
-    mean_y = sum(y_vals)/n
-    for i in range(n):
-        tot += x_vals[i]*y_vals[i]
-        div += x_vals[i]**2
-    return (tot - n*mean_x*mean_y) / (div - n*mean_x**2)
+    pass
 
 #Problem 2
 def compute_intercept_estimator(x_vals,y_vals):
-    n = len(x_vals)
-    mean_x = sum(x_vals)/n
-    mean_y = sum(y_vals)/n
-    return mean_y - compute_slope_estimator(x_vals,y_vals)*mean_x
+    pass
 
 #Problem 3
 def train_model(x_vals,y_vals):
