@@ -4,32 +4,58 @@ import matplotlib.pyplot as plt
 
 #Problem 1
 def compute_slope_estimator(x_vals,y_vals):
-    pass
+    tot = 0
+    div = 0
+    n = len(x_vals)
+    mean_x = sum(x_vals)/n
+    mean_y = sum(y_vals)/n
+    for i in range(n):
+        tot += x_vals[i]*y_vals[i]
+        div += x_vals[i]**2
+    return (tot - n*mean_x*mean_y) / (div - n*mean_x**2)
 
 #Problem 2
 def compute_intercept_estimator(x_vals,y_vals):
-    pass
+    n = len(x_vals)
+    mean_x = sum(x_vals)/n
+    mean_y = sum(y_vals)/n
+    return mean_y - compute_slope_estimator(x_vals,y_vals)*mean_x
 
 #Problem 3
 def train_model(x_vals,y_vals):
-    #your code here
+    a = compute_slope_estimator(x_vals, y_vals)
+    b = compute_intercept_estimator(x_vals, y_vals)
     return (a,b)
 
 #Problem 4
 def dL_da(x_vals,y_vals,a,b):
-    pass
+    n = len(x_vals)
+    part_deriv_a = -2/n * np.sum(x_vals*(y_vals - (a*x_vals) -b))
+    return part_deriv_a
 
 #Problem 5
 def dL_db(x_vals,y_vals,a,b):
-    pass
+    n = len(x_vals)
+    part_deriv_b = -2/n * np.sum(y_vals - (a*x_vals) -b)
+    return part_deriv_b
 
 #Problem 6
 def gradient_descent_step(x_vals,y_vals,a,b,k=0.01):
-    pass
+    part_deriv_a = dL_da(x_vals, y_vals, a, b)
+    part_deriv_b = dL_db(x_vals, y_vals, a, b)
+    
+    n = len(x_vals)
+    a_updated = a - (k/n) * part_deriv_a
+    b_updated = b - (k/n) * part_deriv_b
+
+    return (a_updated, b_updated)
 
 #Problem 7
 def gradient_descent(x_vals,y_vals,a_0=0,b_0=0,k=1000):
-    pass
+    new_a, new_b = a_0, b_0
+    for i in range(k):
+        new_a, new_b = gradient_descent_step(x_vals,y_vals, new_a, new_b)
+    return (new_a, new_b)
 
 # Problem 8
 def fit_quadratic(x_vals, y_vals):
@@ -112,3 +138,4 @@ def plot_generated_data(x_vals, y_vals, scaled=False, f=lambda x: x, g=lambda y:
 
     # Display the plot
     plt.show()
+
