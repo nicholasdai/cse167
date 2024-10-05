@@ -59,10 +59,18 @@ def gradient_descent(x_vals,y_vals,a_0=0,b_0=0,k=1000):
 
 # Problem 8
 def fit_quadratic(x_vals, y_vals):
+
+    x_transformed = x_vals ** 2
+    a = compute_slope_estimator(x_transformed, y_vals)
+    b = compute_intercept_estimator(x_transformed, y_vals)
+    
     return (a, b)
 
 # Problem 9
 def calculate_scaling_parameters(d_vals, l_vals):
+    a = compute_slope_estimator(d_vals, l_vals)
+    b = compute_intercept_estimator(d_vals, l_vals)
+    plot_generated_data(d_vals, generate_y_vals(l_vals))
     return (a, b)
 
 ## Example values for Problem 9
