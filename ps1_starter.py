@@ -68,9 +68,14 @@ def fit_quadratic(x_vals, y_vals):
 
 # Problem 9
 def calculate_scaling_parameters(d_vals, l_vals):
-    a = compute_slope_estimator(d_vals, l_vals)
-    b = compute_intercept_estimator(d_vals, l_vals)
-    plot_generated_data(d_vals, generate_y_vals(l_vals))
+    transform_d = generate_y_vals(d_vals)
+    transform_l = generate_y_vals(l_vals)
+    a = compute_slope_estimator(transform_d, transform_l)
+    plot_generated_data(d_vals, l_vals)
+    plot_generated_data(d_vals, transform_l)
+    plot_generated_data(transform_d, l_vals)
+    plot_generated_data(transform_d, transform_l)
+    b = compute_intercept_estimator(transform_d, transform_l)
     return (a, b)
 
 ## Example values for Problem 9
