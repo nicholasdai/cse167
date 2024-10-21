@@ -71,6 +71,7 @@ def extract_num_features(dataset):
     first_example_x = first_example[0]
     first_example_y = first_example[1]
     num_features = first_example_x.size(0)
+    return num_features
 
 def nonbatched_gradient_descent(dataset, num_epochs=10, learning_rate=0.01):
     num_features = extract_num_features(dataset)
@@ -107,34 +108,34 @@ def main():
 
 # PROBLEM 1
 def logistic_positive_prob(x,a):
-    linear_combination = np.dot(x, a)
-    return sigmoid(linear_combination)
+    return sigmoid(np.dot(a,x))
 
 # PROBLEM 2
 def logistic_derivative_per_datapoint(y_i,x_i,a,j):
-    prob_y_one = logistic_positive_prob(x_i,a)
-    return - (y_i - prob_y_one) * x_i[j]
+    return -1*(y_i - logistic_positive_prob(x_i, a))*x_i[j]
+
 # PROBLEM 3
 def logistic_partial_derivative(y,x,a,j):
-    n = len(x)
-    derivative_sum = 0
-    for i in range(n):
-        derivative_sum += logistic_derivative_per_datapoint(y[i],x[i],a,j)
-
-    avg_derivative_sum = derivative_sum / n
-    return avg_derivative_sum
+    return (sum(logistic_derivative_per_datapoint(y[i],x[i],a,j) for i in range(len(y))))/len(y)
 
 # PROBLEM 4
 def compute_logistic_gradient(a,y,x):
-    pass # YOUR CODE HERE
+    gradient = np.zeros(len(a))
+    
+    for j in range(len(a)):
+        gradient[j] = logistic_partial_derivative(y, x, a, j)
+    
+    return gradient
 
 # PROBLEM 5
 def gradient_update(a,lr,gradient):
-    pass # YOUR CODE HERE
+    return a - lr * gradient
 
 # PROBLEM 6
 def gradient_descent_logistic(initial_a,lr,num_iterations,y,x):
-    pass # YOUR CODE HERE
+    for _ in range(num_iterations):
+        initial_a = gradient_update(initial_a,lr,compute_logistic_gradient(initial_a,y,x))
+    return initial_a
 
 # PROBLEM 7
 # Free Response Answer Here: 
