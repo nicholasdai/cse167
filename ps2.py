@@ -107,15 +107,22 @@ def main():
 
 # PROBLEM 1
 def logistic_positive_prob(x,a):
-    pass # YOUR CODE HERE
+    linear_combination = np.dot(x, a)
+    return sigmoid(linear_combination)
 
 # PROBLEM 2
 def logistic_derivative_per_datapoint(y_i,x_i,a,j):
-    pass # YOUR CODE HERE
-
+    prob_y_one = logistic_positive_prob(x_i,a)
+    return - (y_i - prob_y_one) * x_i[j]
 # PROBLEM 3
 def logistic_partial_derivative(y,x,a,j):
-    pass # YOUR CODE HERE
+    n = len(x)
+    derivative_sum = 0
+    for i in range(n):
+        derivative_sum += logistic_derivative_per_datapoint(y[i],x[i],a,j)
+
+    avg_derivative_sum = derivative_sum / n
+    return avg_derivative_sum
 
 # PROBLEM 4
 def compute_logistic_gradient(a,y,x):
