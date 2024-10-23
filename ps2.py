@@ -157,6 +157,7 @@ def batched_gradient_descent(dataset, num_epochs=10, learning_rate=0.01, batch_s
         for i in range(num_batches):
 
             batch = dataset[i * batch_size:(i + 1) * batch_size]
+            # wait am I supposed to zero the gradient before each batch
             optimizer.zero_grad()
             tot_loss = 0
 
