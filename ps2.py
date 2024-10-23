@@ -139,13 +139,39 @@ def gradient_descent_logistic(initial_a,lr,num_iterations,y,x):
 
 # PROBLEM 7
 # Free Response Answer Here: 
+# Line 78 is an example of when __init__ is called. __init__ is a function that initializes a class with the neccessary parameters, with here the only parameter being the number of features.
 
 # PROBLEM 8
 # Free Response Answer Here: 
+# Line 83 is where forward is called. Forward is a function that computes the logistic function, which is the sigmoid of the logit, which is the linear combination in the form of a dot product of the the weights and the input vector.
 
 # PROBLEM 9
 def batched_gradient_descent(dataset, num_epochs=10, learning_rate=0.01, batch_size=2):
-    pass # YOUR CODE HERE
+    num_features = extract_num_features(dataset)
+    model = TorchLogisticClassifier(num_features)
+    optimizer = optim.SGD(model.parameters(), lr=learning_rate)
+
+    num_batches = len(dataset) // batch_size
+
+    for _ in range(num_epochs):
+        for i in range(num_batches):
+
+            batch = dataset[i * batch_size:(i + 1) * batch_size]
+            optimizer.zero_grad()
+            tot_loss = 0
+
+            for d_x, d_y in batch:
+                prediction = model(d_x)
+                loss = loss_fn(prediction, d_y)
+                tot_loss += loss
+            
+            tot_loss /= batch_size
+            tot_loss.backward()
+            
+            optimizer.step()
+
+    return model
+
 
 # PROBLEMS 10-12
 def split_into_batches(dataset, batch_size):
