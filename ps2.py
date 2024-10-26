@@ -204,10 +204,24 @@ def alt_gradient_descent(dataset, num_epochs=10, learning_rate=0.01, batch_size=
     return model
 
 # PROBLEM 10
-# Proposition: $\nabla_{\vec{w}}L(\vec{w}|B) := \sum_{d \in B} \nabla_{\vec{w}}L(\vec{w}|d)$
+# Free Response Answer Here: 
+# In this iternation, the line 1 (optimizer.zero_grad) is called in the beginning of each epoch
+# before the code loops through each of the batches. For each batch the model calculates
+# how confidient it is in its prediction and how much loss there is in those predictions.
+# Then  loss.backwards() backproprogates adds up the graident for that batch. Once
+# all the graidents for all the batches have been calculated. Line A (optimizer.step())
+# is called where the gradients that were previously calculated are then used to update the 
+# weights. In other words our weights are updated once per epoch after the graidents for 
+# each batch has been computed. 
+#  $\nabla_{\vec{w}}L(\vec{w}|B) := \sum_{d \in B} \nabla_{\vec{w}}L(\vec{w}|d)$
 
 # PROBLEM 11
-# Proposition: $\nabla_{\vec{w}}L(\vec{w}|B) :=  \sum_{i=0}^{numepochs} \sum_{d \in B} \nabla_{\vec{w^i}}L(\vec{w^i}|d)$
+# In this iternation, there optimizer.zero_grad() is never called meaning that our 
+# gradient values are never set back to zero. Since the graidents are never set back to zero,
+# our gradients continue to accumlate giving us an innacurate gradient decsent steps since 
+# later updates in the weights are created from the sum of gradients from ealier states
+# of the model's graidents. 
+#  $\nabla_{\vec{w}} L_{\text{total}} = \sum_{e=1}^{t} \sum_{d \in D} \nabla_{\vec{w}^{(e)}} L\left( \vec{w}^{(e)} \mid d \right)$
 
 # PROBLEM 12
 # Proposition: 2B, with alt_gradient_descent(dataset, learning_rate=lr, batch_size=k)
