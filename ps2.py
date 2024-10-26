@@ -204,11 +204,10 @@ def alt_gradient_descent(dataset, num_epochs=10, learning_rate=0.01, batch_size=
     return model
 
 # PROBLEM 10
-# Free Response Answer Here: 
 # Proposition: $\nabla_{\vec{w}}L(\vec{w}|B) := \sum_{d \in B} \nabla_{\vec{w}}L(\vec{w}|d)$
 
 # PROBLEM 11
-# Proposition: $\nabla_{\vec{w}}L(\vec{w}|B) :=  \sum_{0}^{numepochs} \sum_{d \in B} \nabla_{\vec{w}}L(\vec{w}|d)$
+# Proposition: $\nabla_{\vec{w}}L(\vec{w}|B) :=  \sum_{i=0}^{numepochs} \sum_{d \in B} \nabla_{\vec{w^i}}L(\vec{w^i}|d)$
 
 # PROBLEM 12
-# Free Response Answer Here: 
+# Proposition: 2B, with alt_gradient_descent(dataset, learning_rate=lr, batch_size=k)
