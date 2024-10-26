@@ -205,18 +205,10 @@ def alt_gradient_descent(dataset, num_epochs=10, learning_rate=0.01, batch_size=
 
 # PROBLEM 10
 # Free Response Answer Here: 
-# This solution is just a placeholder for now I'm not really too sure about this question
-# Its kinda hard to tell, but it looks like line A the (optimizer.step) is outside the batch
-# for loop. If this is the case then we are optimizing our weights once per epoch after
-# all the graidents for all the batches have been calculated. We set the gradients to zero
-# after before the batches because backward sums of these griadents which will then be used
-# to update the weights
-# I'm not to sure if this is correct.
+# Proposition: $\nabla_{\vec{w}}L(\vec{w}|B) := \sum_{d \in B} \nabla_{\vec{w}}L(\vec{w}|d)$
 
 # PROBLEM 11
-# For this problem I am thinking that if the optimzer.zero is never called that would cause
-# our optimization to be inccorect because we would be trying to optimizie on weights 
-# with graidents that were calculated at previous points in our optimization. 
+# Proposition: $\nabla_{\vec{w}}L(\vec{w}|B) :=  \sum_{0}^{numepochs} \sum_{d \in B} \nabla_{\vec{w}}L(\vec{w}|d)$
 
 # PROBLEM 12
 # Free Response Answer Here: 
