@@ -224,4 +224,12 @@ def alt_gradient_descent(dataset, num_epochs=10, learning_rate=0.01, batch_size=
 #  $\nabla_{\vec{w}} L_{\text{total}} = \sum_{e=1}^{t} \sum_{d \in D} \nabla_{\vec{w}^{(e)}} L\left( \vec{w}^{(e)} \mid d \right)$
 
 # PROBLEM 12
-# Proposition: 2B, with alt_gradient_descent(dataset, learning_rate=lr, batch_size=k)
+# 2B is the correct answer. In order to make both gradient descents equivalent, 
+# the main changes are with regards to where the gradient is set to 0 and where
+# the updates using the step take place. The gradients must be set to 0 for 
+# each individual batch, so that the accumulated gradients from previous 
+# batches do not carry over. However, the weights are actively being updated 
+# once for each batch, so the step must take place within each individual 
+# batch. Therefore, 2B is the optimal answer, with the arguments for 
+# alt_gradient_descent being set to (dataset, learning_rate=lr, batch_size=k),
+# so that the arguments are the exact same.
