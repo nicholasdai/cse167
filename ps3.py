@@ -144,7 +144,11 @@ class TorchMLP(nn.Module):
         self.W1 = nn.Parameter(torch.tensor([[3.0, 4.0, 5.0, 6.0], [-5.0, 4.0, 3.0, -2.0]]))
         self.W2 = nn.Parameter(torch.tensor([1.0, -3.0]))
 
-
+    def forward(self, x):
+        x = torch.mm(x, self.W0)
+        x = torch.relu(torch.mm(x, self.W1.T))
+        x = torch.mm(x, self.W2.unsqueeze(1))
+        return x
     
     '''
         # how many in features, how many outfeatures?
