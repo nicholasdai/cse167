@@ -127,14 +127,26 @@ class TorchMLP(nn.Module):
         super().__init__()
         ##YOUR CODE HERE##
 
+        # how many in features, how many outfeatures?
+        # what are weight and bias terms? do we just randomize? or set it to anything we want?
+        self.W0 =
+        self.w1 =
+        self.w2 =
+        self.w3 =
+
     def forward(self, x):
-        pass # YOUR CODE HERE
+        output = self.W0 + self.W1 * x + self.W2 * torch.pow(x, 2)
 
 # PROBLEM 11
 def torch_loss(y_predicted,y_observed):
-    pass # YOUR CODE HERE
+    loss = torch.square(y_predicted - y_observed)
 
 # PROBLEM 12
 def torch_compute_gradient(x,y_observed,model):
-    pass # YOUR CODE HERE
+    # do we 0 the gradients
+    model.train()
+    y_predicted = model(x)
+    loss = torch_loss(y_predicted, y_observed)
+    loss.backward()
+    return model
 
