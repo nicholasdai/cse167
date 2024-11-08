@@ -113,6 +113,13 @@ def d_loss_d_h0(variable_dict,W1,W2,y_observed):
 
 #Problem 8
 def d_loss_d_r0(variable_dict,W1,W2,y_observed):
+
+    r1_gradient = d_loss_d_r1(variable_dict, W2, y_observed)
+    gradient_matrix = np.dot(W1.T, r1_gradient)
+    r0_derivative = (variable_dict['r0'] > 0).astype(int) 
+    return gradient_matrix * r0_derivative
+
+    '''
     r1_gradient = d_loss_d_r1(variable_dict, W2, y_observed)
     gradient_matrix = np.outer(r1_gradient, W1).sum(axis=0)
     r0_derivative = np.array([relu_derivative(variable_dict['r0'][0]),
@@ -120,7 +127,7 @@ def d_loss_d_r0(variable_dict,W1,W2,y_observed):
                               relu_derivative(variable_dict['r0'][2]),
                               relu_derivative(variable_dict['r0'][3])])
     return gradient_matrix * r0_derivative
-
+    '''
 #Problem 9
 def d_loss_d_W0(variable_dict,W1,W2,y_observed):
     r0_gradient = d_loss_d_r0(variable_dict, W1, W2, y_observed)
@@ -129,10 +136,17 @@ def d_loss_d_W0(variable_dict,W1,W2,y_observed):
 
 #PROBLEM 10
 class TorchMLP(nn.Module):
+    
     def __init__(self):
         super().__init__()
         ##YOUR CODE HERE##
+        self.W0 = nn.Parameter(torch.tensor([[1.0], [2.0], [3.0], [4.0]]))
+        self.W1 = nn.Parameter(torch.tensor([[3.0, 4.0, 5.0, 6.0], [-5.0, 4.0, 3.0, -2.0]]))
+        self.W2 = nn.Parameter(torch.tensor([1.0, -3.0]))
 
+
+    
+    '''
         # how many in features, how many outfeatures?
         # what are weight and bias terms? do we just randomize? or set it to anything we want?
         self.W0 =
@@ -142,7 +156,7 @@ class TorchMLP(nn.Module):
 
     def forward(self, x):
         output = self.W0 + self.W1 * x + self.W2 * torch.pow(x, 2)
-
+    '''
 # PROBLEM 11
 def torch_loss(y_predicted,y_observed):
     loss = torch.square(y_predicted - y_observed)
@@ -150,7 +164,11 @@ def torch_loss(y_predicted,y_observed):
 # PROBLEM 12
 def torch_compute_gradient(x,y_observed,model):
     # do we 0 the gradients
+
     model.train()
+    #zero the gradients
+    model.zero_grad()
+    
     y_predicted = model(x)
     loss = torch_loss(y_predicted, y_observed)
     loss.backward()
