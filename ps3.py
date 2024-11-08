@@ -102,8 +102,14 @@ def d_loss_d_W1(variable_dict,W2,y_observed):
 #Problem 7
 def d_loss_d_h0(variable_dict,W1,W2,y_observed):
     r1_gradient = d_loss_d_r1(variable_dict, W2, y_observed)
+    r0 = variable_dict['r0']
+    return np.dot(W1.T, r1_gradient)
+    '''
+    Old implementation
+    r1_gradient = d_loss_d_r1(variable_dict, W2, y_observed)
     matrix = np.outer(r1_gradient, W1).sum(axis=0)
     return matrix
+    '''
 
 #Problem 8
 def d_loss_d_r0(variable_dict,W1,W2,y_observed):
