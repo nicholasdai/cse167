@@ -9,7 +9,8 @@ import spacy
 
 def load_corpus():
 	#this loads the data from sample_corpus.txt
-	with open('sample_corpus.txt','r',encoding="utf8") as f:
+	with open('test_corpus_short.txt','r',encoding="utf8") as f:
+	# with open('sample_corpus.txt','r',encoding="utf8") as f:
 		corpus = f.read().replace('\n',' ')
 	return corpus
 
@@ -42,14 +43,17 @@ def segment_and_tokenize(corpus):
 	#in the command line before using this!
 
 	#corpus is assumed to be a string, containing the entire corpus
+	# print(corpus)
 	nlp = spacy.load('en_core_web_sm')
 	tokens = nlp(corpus)
 	sents = [[t.text for t in s] for s in tokens.sents if len([t.text for t in s])>1]
 	sents = remove_infrequent_words(sents)
 	sents = [['<START>']+s+['<END>'] for s in sents]
+	# print(sents)
 	return sents
 
 def make_word_to_ix(sents):
+	# print(sents)
 	word_to_ix = {}
 	num_unique_words = 0
 	for sent in sents:
@@ -58,12 +62,14 @@ def make_word_to_ix(sents):
 				word_to_ix[word] = num_unique_words
 				num_unique_words += 1
 
-
+	# print(word_to_ix)
 	return word_to_ix
 
 def sent_to_onehot_vecs(sent,word_to_ix):
 	#note: this is not how you would do this in practice! 
 
+	# print(sent)
+	# print(word_to_ix)
 	vecs = []
 	for i in range(len(sent)):
 		word = sent[i]
@@ -73,6 +79,7 @@ def sent_to_onehot_vecs(sent,word_to_ix):
 		vec[word_index] = 1
 		vecs.append(vec)
 
+	# print(vecs)
 	return vecs
 
 def vectorize_sents(sents,word_to_ix):
@@ -138,7 +145,9 @@ class ElmanNetwork(nn.Module):
 		for i in range(len(sent)-1):
 			current_word = sent[i]
 
+			# print(current_word)
 			current_word_embedding = self.embed_word(current_word)
+			# print(current_word_embedding)
 
 			h_current = self.elman_unit(current_word_embedding,h_previous)
 
