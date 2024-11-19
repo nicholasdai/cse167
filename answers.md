@@ -10,4 +10,4 @@ p_i = \frac{e^{s_i}}{\sum_{j=1}^{n} e^{s_j}}
 \]
 
 7. Because the elman network processes all the words sequentially, the hidden state that is updated only takes in the current word and the previous hidden state as variables, so future words cannot retroactively affect past words.
-8. 
+8. When the first word is processed, the model's hidden state is 0, but as the first word is converted into a new embedding, it is given a new hidden state which has a calculation dependent on the word embedding, weight matrices and the bias term. As the previous hidden state is 0, only the word embedding, the current weight matrix, and the bias term affect the new hidden state. However now that the first word is passed in, the previous hidden state is no longer 0, so all future representations take in a more complicated formula that includes the previous word embeddings and the previous hidden states, the latter of which is no longer 0. 
