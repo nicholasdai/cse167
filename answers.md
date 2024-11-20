@@ -16,13 +16,13 @@ p_i = \frac{e^{s_i}}{\sum_{j=1}^{n} e^{s_j}}
 11. The Elman network would not be able to model this dependency very well due of its limited memory. With the nature of the model, the Elman network struggles with longer range dependences, which can be explained by the vanishing gradient problem. The model continues to update and learn from each step meaning that over the span of a couple hundred words, the model struggles to remember important context from earlier in the sequence.
 12. 
   1) 
-     h_1 = σ(0.5) = 0.622
-     y_1 = softmax(0.0622, 0.1244 ,0.0622) = [0.326, 0.347, 0.326]
-     L_1 = -log(0.347) = 1.058
-     h_2 = σ(0.611) = 0.648
-     y_2 = softmax(0.0648,0.1296,0.0648) = [0.326, 0.347, 0.326]
-     L_2 = -log(0.326) = 1.121
-     L = 1.058 + 1.121 = 2.179
+     h_1 = σ(0.5) = 0.622  
+     y_1 = softmax(0.0622, 0.1244 ,0.0622) = [0.326, 0.347, 0.326]  
+     L_1 = -log(0.347) = 1.058  
+     h_2 = σ(0.611) = 0.648  
+     y_2 = softmax(0.0648,0.1296,0.0648) = [0.326, 0.347, 0.326]  
+     L_2 = -log(0.326) = 1.121  
+     L = 1.058 + 1.121 = 2.179  
   3) 
     ∂L/∂W_h = 
   4)  
