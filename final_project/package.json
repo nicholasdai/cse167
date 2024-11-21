@@ -1,13 +1,12 @@
 {
   "name": "final_project",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "/src/index.ts",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build --watch",
-    "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "format": "npx prettier --ignore-path .gitignore --write \"**/*.+(tsx|js|ts|json)\"",
+    "clean": "rimraf dist",
+    "build": "tsc",
+    "watch:build": "tsc --watch",
+    "watch:server": "nodemon './dist/index.js' --watch './dist'",
     "start": "npm run open",
     "open": "concurrently \"http-server -a localhost -p 1234\" \"open http://localhost:1234/build\""
   },
@@ -15,9 +14,15 @@
     "@cloudscape-design/components": "^3.0.611",
     "@cloudscape-design/design-tokens": "^3.0.35",
     "@cloudscape-design/global-styles": "^1.0.27",
+    "@types/express": "^5.0.0",
+    "express": "^4.21.1",
+    "nodemon": "^3.1.7",
+    "npm-run-all": "^4.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.0"
+    "react-router-dom": "^6.22.0",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",
@@ -33,12 +38,16 @@
     "http-server": "^14.1.1",
     "postcss": "^8.4.38",
     "sass": "^1.75.0",
-    "typescript": "^5.4.5",
+    "typescript": "^5.6.3",
     "vite": "^5.4.8"
   },
   "overrides": {
     "react-virtual": {
       "react": "^18.0.0"
     }
-  }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
