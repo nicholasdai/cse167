@@ -1,0 +1,3 @@
+Run 'nodemon src/index.ts' to run the code
+
+Oh yeah you might need to install a few things first actually...
