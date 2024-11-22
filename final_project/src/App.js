@@ -1,42 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import "@cloudscape-design/global-styles/index.css"
-import Table from '@cloudscape-design/components/table'; // Correct import
-import { SpaceBetween } from '@cloudscape-design/components'; // Import SpaceBetween component for layout
-
-const columns = [
-  {
-    id: 'name',
-    header: 'Name',
-    cell: item => item.name, // Use `cell` function to render each cell in this column
-  },
-  {
-    id: 'age',
-    header: 'Age',
-    cell: item => item.age, // `cell` function to render each cell in this column
-  },
-  {
-    id: 'country',
-    header: 'Country',
-    cell: item => item.country, // `cell` function to render each cell in this column
-  },
-];
-
-const items = [
-  { name: 'John Doe', age: 28, country: 'USA' },
-  { name: 'Jane Smith', age: 34, country: 'Canada' },
-  { name: 'Bob Johnson', age: 45, country: 'UK' },
-];
+import { Container, SpaceBetween, Button, Flashbar } from '@cloudscape-design/components';
 
 function App() {
+  const [videoUrl, setVideoUrl] = useState(null);
+  const [error, setError] = useState(null);
+  const [transcription, setTranscription] = useState('No transcription');
+
+  // Handle file selection and preview
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file && file.type === 'video/mp4') {
+      const videoUrl = URL.createObjectURL(file);
+      setVideoUrl(videoUrl);
+
+
+
+      setError(null); // Clear any previous errors
+    } else {
+      setError('Please upload a valid MP4 file.');
+    }
+  };
+
   return (
-    <SpaceBetween direction="vertical" size="l">
-      <Table
-        columnDefinitions={columns}
-        items={items}
-        trackBy="name"
-        loading={false}
-      />
-    </SpaceBetween>
+    <Container>
+      <SpaceBetween direction="vertical" size="l">
+        <h1>Sample Question Generator</h1>
+
+        {/* File Input */}
+        <div>
+          <input 
+            type="file" 
+            accept="video/mp4" 
+            onChange={handleFileChange} 
+          />
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <Flashbar items={[{ header: error, type: 'error' }]} />
+        )}
+
+        {/* Video Player */}
+        {videoUrl && (
+          <div>
+            <video controls width="600">
+              <source src={videoUrl} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        )}
+
+        {/* Text */}
+        {Text && (
+          <div>
+            <p>{transcription}</p>
+          </div>
+        )}
+      </SpaceBetween>
+    </Container>
   );
 }
 
