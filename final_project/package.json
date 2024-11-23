@@ -2,6 +2,7 @@
   "name": "final_project",
   "version": "1.0.0",
   "main": "/src/index.js",
+  "type": "module",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -9,13 +10,14 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@cloudscape-design/components": "*",
+    "@cloudscape-design/global-styles": "*",
+    "axios": "^1.7.7",
+    "openai": "^4.73.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-scripts": "^5.0.0",
-    "@cloudscape-design/global-styles": "*",
-    "@cloudscape-design/components": "*"
+    "react-scripts": "^5.0.0"
   },
-  "devDependencies": {},
   "browserslist": {
     "production": [
       ">0.2%",

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import "@cloudscape-design/global-styles/index.css"
+import "@cloudscape-design/global-styles/index.css";
 import { Container, SpaceBetween, Button, Flashbar } from '@cloudscape-design/components';
 
 function App() {
@@ -9,16 +9,28 @@ function App() {
   const [transcription, setTranscription] = useState('No transcription');
 
   // Handle file selection and preview
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
 
     if (file && file.type === 'video/mp4') {
       const videoUrl = URL.createObjectURL(file);
       setVideoUrl(videoUrl);
-
-
-
       setError(null); // Clear any previous errors
+
+      // Send the file to the server for transcription
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await axios.post('http://localhost:3001/transcribe', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        setTranscription(response.data.transcription); // Display transcription
+      } catch (err) {
+        setError('Error transcribing video.');
+      }
     } else {
       setError('Please upload a valid MP4 file.');
     }
@@ -31,10 +43,10 @@ function App() {
 
         {/* File Input */}
         <div>
-          <input 
-            type="file" 
-            accept="video/mp4" 
-            onChange={handleFileChange} 
+          <input
+            type="file"
+            accept="video/mp4"
+            onChange={handleFileChange}
           />
         </div>
 
@@ -53,8 +65,8 @@ function App() {
           </div>
         )}
 
-        {/* Text */}
-        {Text && (
+        {/* Transcription Text */}
+        {transcription && (
           <div>
             <p>{transcription}</p>
           </div>
