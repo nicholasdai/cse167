@@ -7,6 +7,7 @@ function App() {
   const [videoUrl, setVideoUrl] = useState(null);
   const [error, setError] = useState(null);
   const [transcription, setTranscription] = useState('No transcription');
+  const [questions, setQuestions] = useState('No questions');
 
   // Handle file selection and preview
   const handleFileChange = async (event) => {
@@ -27,7 +28,10 @@ function App() {
             'Content-Type': 'multipart/form-data',
           },
         });
+        console.log(response)
         setTranscription(response.data.transcription); // Display transcription
+        setQuestions(response.data.questions); // Display transcription
+
       } catch (err) {
         setError('Error transcribing video.');
       }
@@ -69,6 +73,13 @@ function App() {
         {transcription && (
           <div>
             <p>{transcription}</p>
+          </div>
+        )}
+
+        {/* Sample Questions */}
+        {questions && (
+          <div>
+            <p>{questions}</p>
           </div>
         )}
       </SpaceBetween>

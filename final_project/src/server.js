@@ -14,16 +14,24 @@ const app = express();
 app.use(cors());
 const port = 3001;
 
-// Set up multer to handle file uploads
-const upload = multer({ dest: 'uploads/' });
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/'); 
+    },
+    filename: (req, file, cb) => {
+      const extname = path.extname(file.originalname);
+      const filename = Date.now() + '.mp4'; // we need to include not just mp4s
+      cb(null, filename);
+    },
+  });
 
-// Set up OpenAI API client
+const upload = multer({ storage: storage });
+
 // console.log(process.env.OPENAI_API_KEY);
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,  // Get the API key from .env file
+  apiKey: process.env.OPENAI_API_KEY,  // DM ME FOR API KEY
 });
 
-// API route for transcribing uploaded videos
 app.post('/transcribe', upload.single('file'), async (req, res) => {
   const file = req.file;
 
@@ -35,12 +43,9 @@ app.post('/transcribe', upload.single('file'), async (req, res) => {
     console.log("wrong")
   }
 
-  // Read the file
   const filePath = path.join(path.resolve(), file.path);
 
   try {
-    // OpenAI Whisper API expects a file buffer, so we'll read it
-    // console.log(filePath)
 
     const stats = fs.statSync(filePath);
 
@@ -53,30 +58,41 @@ app.post('/transcribe', upload.single('file'), async (req, res) => {
       console.log('It is something else.');
     }
 
-    const f = (fs.createReadStream(filePath))
-
     // console.log('OpenAI Client Initialized:', openai)
-    async function testOpenAI() {
+    // async function testOpenAI() {
+    //     const completion = await openai.chat.completions.create({
+    //         model: 'gpt-3.5-turbo',  // Use a valid model like 'gpt-3.5-turbo'
+    //         messages: [{ role: 'user', content: 'Hello, how are you?' }],
+    //       });
+    //     console.log("hi")
+    //     console.log(completion.choices[0].message)
+    // }
+
+    // testOpenAI()
+    async function transcribe() {
+        const f = (fs.createReadStream(filePath))
+        const transcription = await openai.audio.transcriptions.create({
+            file: f,
+            model: 'whisper-1',
+        });
+        console.log(transcription.text)
+
         const completion = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',  // Use a valid model like 'gpt-3.5-turbo'
-            messages: [{ role: 'user', content: 'Hello, how are you?' }],
-          });
-        console.log(completion)
+            model: 'gpt-3.5-turbo',
+            messages: [{
+                role: 'user',
+                content: `Create quiz questions based on the following audio transcription. The questions should test whether the person answering listened to the audio:\n\n${transcription.text}`,
+            }],
+            });
+        const questions = (completion.choices[0].message.content)
+        console.log(questions)
+
+        res.json({ transcription: transcription.text, questions: questions });
+
+        fs.unlinkSync(filePath);
     }
+    transcribe()
 
-    testOpenAI()
-
-
-    // const transcription = await openai.audio.transcriptions.create({
-    //   file: f,
-    //   model: 'whisper-1',
-    //   response_format: "text",
-    // });
-
-    // // Clean up the uploaded file after processing
-    // fs.unlinkSync(filePath);
-
-    // res.json({ transcription: transcription.text });
   } catch (error) {
     console.error('Error during transcription:', error);
     res.status(500).send('Error transcribing video.');
