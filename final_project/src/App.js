@@ -1,42 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "@cloudscape-design/global-styles/index.css";
-import { Container, SpaceBetween, Button, Flashbar } from '@cloudscape-design/components';
+import { Container, SpaceBetween, Button, Flashbar, Cards, FormField } from '@cloudscape-design/components';
+
+// subject to be changed once this is scaleable
+const PORT = '3001'
+const apiLink = 'http://localhost:' + PORT + '/transcribe'
 
 function App() {
+
   const [videoUrl, setVideoUrl] = useState(null);
   const [error, setError] = useState(null);
   const [transcription, setTranscription] = useState('No transcription');
   const [questions, setQuestions] = useState('No questions');
+  const [answers, setAnswers] = useState('No answers');
 
-  // Handle file selection and preview
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = async (file) => {
 
-    if (file && file.type === 'video/mp4') {
-      const videoUrl = URL.createObjectURL(file);
-      setVideoUrl(videoUrl);
-      setError(null); // Clear any previous errors
+    if (file && (file.type === 'audio/mp3' || file.type === 'audio/mpeg' || file.type === 'video/mp4')) {
+      setVideoUrl(URL.createObjectURL(file));
 
-      // Send the file to the server for transcription
       const formData = new FormData();
       formData.append('file', file);
 
       try {
-        const response = await axios.post('http://localhost:3001/transcribe', formData, {
+        const response = await axios.post(apiLink, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-        console.log(response)
-        setTranscription(response.data.transcription); // Display transcription
-        setQuestions(response.data.questions); // Display transcription
+
+        setTranscription(response.data.transcription);
+        setQuestions(response.data.questions);
+        setAnswers(response.data.answers);
 
       } catch (err) {
-        setError('Error transcribing video.');
+        setError('Error transcribing video: ' + err);
       }
     } else {
-      setError('Please upload a valid MP4 file.');
+      setError('Please upload a valid MP3 or MP4 file.');
     }
   };
 
@@ -45,41 +47,49 @@ function App() {
       <SpaceBetween direction="vertical" size="l">
         <h1>Sample Question Generator</h1>
 
-        {/* File Input */}
-        <div>
-          <input
-            type="file"
-            accept="video/mp4"
-            onChange={handleFileChange}
-          />
-        </div>
+        <FormField label="Input a File">
+          <div>
+            <input
+              type="file"
+              accept="audio/mp3,video/mp4"
+              onChange={(e) => handleFileChange(e.target.files[0])}
+            />
+            <button onClick={() => window.location.reload()}>
+              Start Over
+            </button>
+          </div>
+        </FormField>
 
-        {/* Error Message */}
         {error && (
           <Flashbar items={[{ header: error, type: 'error' }]} />
         )}
 
-        {/* Video Player */}
         {videoUrl && (
           <div>
-            <video controls width="600">
-              <source src={videoUrl} type="video/mp4" />
-              Your browser does not support the video tag.
+            <video controls width="400">
+              <source src={videoUrl} type={videoUrl.endsWith('.mp4') ? 'video/mp4' : 'audio/mp3'} />
             </video>
           </div>
         )}
 
-        {/* Transcription Text */}
         {transcription && (
           <div>
-            <p>{transcription}</p>
+            <h3>Transcription</h3>
+            <p style={{ whiteSpace: 'pre-line' }}>{transcription}</p>
           </div>
         )}
 
-        {/* Sample Questions */}
         {questions && (
           <div>
-            <p>{questions}</p>
+            <h3>Questions</h3>
+            <p style={{ whiteSpace: 'pre-line' }}>{questions}</p>
+          </div>
+        )}
+
+        {answers && (
+          <div>
+            <h3>Answers</h3>
+            <p style={{ whiteSpace: 'pre-line' }}>{answers}</p>
           </div>
         )}
       </SpaceBetween>

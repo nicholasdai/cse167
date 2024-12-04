@@ -13,10 +13,11 @@
     "@cloudscape-design/components": "*",
     "@cloudscape-design/global-styles": "*",
     "axios": "^1.7.7",
+    "fluent-ffmpeg": "^2.1.3",
     "openai": "^4.73.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-scripts": "^5.0.0"
+    "react-scripts": "^5.0.1"
   },
   "browserslist": {
     "production": [
