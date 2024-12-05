@@ -5,20 +5,29 @@ import { Container, SpaceBetween, Button, Flashbar, Cards, FormField } from '@cl
 
 // subject to be changed once this is scaleable
 const PORT = '3001'
-const apiLink = 'http://localhost:' + PORT + '/transcribe'
+const apiLink =  `http://localhost:${PORT}/transcribe`
 
 function App() {
 
   const [videoUrl, setVideoUrl] = useState(null);
   const [error, setError] = useState(null);
+  const [warning, setWarning] = useState(null);
   const [transcription, setTranscription] = useState('No transcription');
   const [questions, setQuestions] = useState('No questions');
   const [answers, setAnswers] = useState('No answers');
+  const [fileName, setFileName] = useState('');
 
   const handleFileChange = async (file) => {
 
+    setError(null)
+
     if (file && (file.type === 'audio/mp3' || file.type === 'audio/mpeg' || file.type === 'video/mp4')) {
       setVideoUrl(URL.createObjectURL(file));
+      setFileName(file.name)
+
+      if (file.size > 5000000) {
+        setWarning("Warning: This is a large file. This may take a while.")
+      }
 
       const formData = new FormData();
       formData.append('file', file);
@@ -42,6 +51,15 @@ function App() {
     }
   };
 
+  const downloadFile = (content, filename) => {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+
   return (
     <Container>
       <SpaceBetween direction="vertical" size="l">
@@ -62,6 +80,10 @@ function App() {
 
         {error && (
           <Flashbar items={[{ header: error, type: 'error' }]} />
+        )}
+
+        {warning && (
+          <Flashbar items={[{ header: warning, type: 'warning' }]} />
         )}
 
         {videoUrl && (
@@ -92,6 +114,15 @@ function App() {
             <p style={{ whiteSpace: 'pre-line' }}>{answers}</p>
           </div>
         )}
+
+        <div>
+          <button onClick={() => downloadFile(`Transcription:\n${transcription}`, `${fileName}_transcription.txt`)}>
+              Download Transcription
+          </button>
+          <button onClick={() => downloadFile(`Questions:\n${questions}\n\nAnswers:\n${answers}`, `${fileName}_questions_and_answers.txt`)}>
+              Download Questions and Answers
+          </button>
+        </div>
       </SpaceBetween>
     </Container>
   );
