@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "@cloudscape-design/global-styles/index.css";
-import { Container, SpaceBetween, Button, Flashbar, Cards, FormField } from '@cloudscape-design/components';
+import { Container, SpaceBetween, Button, Flashbar, FormField } from '@cloudscape-design/components';
 
 // subject to be changed once this is scaleable
 const PORT = '3001'
 const apiLink =  `http://localhost:${PORT}/transcribe`
 
 function App() {
-
   const [videoUrl, setVideoUrl] = useState(null);
   const [error, setError] = useState(null);
   const [warning, setWarning] = useState(null);
@@ -16,9 +15,9 @@ function App() {
   const [questions, setQuestions] = useState('No questions');
   const [answers, setAnswers] = useState('No answers');
   const [fileName, setFileName] = useState('');
+  const [visibleAnswers, setVisibleAnswers] = useState({});  // Track visibility of answers
 
   const handleFileChange = async (file) => {
-
     setError(null)
 
     if (file && (file.type === 'audio/mp3' || file.type === 'audio/mpeg' || file.type === 'video/mp4')) {
@@ -49,6 +48,13 @@ function App() {
     } else {
       setError('Please upload a valid MP3 or MP4 file.');
     }
+  };
+
+  const handleAnswerClick = (index) => {
+    setVisibleAnswers(prevState => ({
+      ...prevState,
+      [index]: !prevState[index],
+    }));
   };
 
   const downloadFile = (content, filename) => {
@@ -104,14 +110,20 @@ function App() {
         {questions && (
           <div>
             <h3>Questions</h3>
-            <p style={{ whiteSpace: 'pre-line' }}>{questions}</p>
-          </div>
-        )}
-
-        {answers && (
-          <div>
-            <h3>Answers</h3>
-            <p style={{ whiteSpace: 'pre-line' }}>{answers}</p>
+            <div>
+              {questions.split('\n').map((question, index) => (
+                <div key={index}>
+                  <Button variant="link" onClick={() => handleAnswerClick(index)}>
+                    {question}
+                  </Button>
+                  {visibleAnswers[index] && answers.split('\n')[index] && (
+                    <p style={{ whiteSpace: 'pre-line', marginTop: '10px' }}>
+                      {answers.split('\n')[index]}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
