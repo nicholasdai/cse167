@@ -1,4 +1,6 @@
-Run 'npm start' to run the code
+Run 'npm start' on the App.js to run the website, along with 'python server.py' to run the server
+
+You may need to run 'npm install' first to download the dependencies if they are not downloaded yet
 
 Oh yeah you might need to install a few things first actually...
 
